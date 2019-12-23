@@ -1,3 +1,67 @@
 #!/bin/bash
 
-echo "rip and tear"
+echo "Doom Speedrun Helper - by Mark Ridlen"
+
+# This first part will help you configure doom-speedrun-helper
+if [ ! -f "~/.doom-speedrun-helper" ]; then
+	echo "No configuration file found... starting manual configuration..."
+
+	echo "Finding Ultimate Doom wad..."
+	DOOMU_WAD=$(find ~ -name "doomu.wad" | head -n1)
+	if [ -z "$DOOMU_WAD" ]; then
+		DOOMU_ENABLED=0
+	else
+		DOOMU_ENABLED=1
+	fi
+	
+	echo "Finding Doom 2 wad..."
+	DOOM2_WAD=$(find ~ -name "doom2.wad" | head -n1)
+	if [ -z "$DOOM2_WAD" ]; then
+		DOOM2_ENABLED=0
+	else
+		DOOM2_ENABLED=1
+	fi
+
+	echo "Finding GZDoom..."
+	GZDOOM_PATH=$(find ~ -type f -name "gzdoom")
+	if [ -z "$GZDOOM_PATH" ]; then
+		GZDOOM_ENABLED=0
+	else
+		GZDOOM_ENABLED=1
+	fi
+
+	echo "Finding prboom..."
+	PRBOOM_PATH=$(which prboom | grep -v "no prboom")
+	if [ -z "$PRBOOM_PATH" ]; then
+		PRBOOM_ENABLED=0
+	else
+		PRBOOM_ENABLED=1
+	fi
+
+	echo "Finding prboom-plus..."
+	PRBOOM_PLUS_PATH=$(which prboom | grep -v "no prboom")
+	if [ -z "$PRBOOM_PATH" ]; then
+		PRBOOM_PLUS_ENABLED=0
+	else
+		PRBOOM_PLUS_ENABLED=1
+	fi
+
+	#echo "[TBD] Finding crispy..."
+
+	#Dump all variables to configuration file
+	touch ~/.doom-speedrun-helper
+	echo "DOOMU_WAD=$DOOMU_WAD" >> ~/.doom-speedrun-helper
+	echo "DOOM2_WAD=$DOOM2_WAD" >> ~/.doom-speedrun-helper
+	echo "DOOMU_ENABLED=$DOOMU_ENABLED" >> ~/.doom-speedrun-helper
+	echo "DOOM2_ENABLED=$DOOM2_ENABLED" >> ~/.doom-speedrun-helper
+	echo "GZDOOM_PATH=$GZDOOM_PATH" >> ~/.doom-speedrun-helper
+	echo "GZDOOM_ENABLED=$GZDOOM_ENABLED" >> ~/.doom-speedrun-helper
+	echo "PRBOOM_PATH=$PRBOOM_PATH" >> ~/.doom-speedrun-helper
+	echo "PRBOOM_ENABLED=$PRBOOM_ENABLED" >> ~/.doom-speedrun-helper
+	echo "PRBOOM_PLUS_PATH=$PRBOOM_PLUS_PATH" >> ~/.doom-speedrun-helper
+	echo "PRBOOM_PLUS_ENABLED=$PRBOOM_PLUS_ENABLED" >> ~/.doom-speedrun-helper
+
+	echo " "
+	echo "Configuration file written:"
+	cat ~/.doom-speedrun-helper
+fi
