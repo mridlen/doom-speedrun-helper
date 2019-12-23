@@ -3,7 +3,8 @@
 echo "Doom Speedrun Helper - by Mark Ridlen"
 
 # This first part will help you configure doom-speedrun-helper
-if [ ! -f "~/.doom-speedrun-helper" ]; then
+DOOM_SR_CONFIG=~/.doom-speedrun-helper
+if [ ! -f "$DOOM_SR_CONFIG" ]; then
 	echo "No configuration file found... starting manual configuration..."
 
 	echo "Finding Ultimate Doom wad..."
@@ -62,6 +63,75 @@ if [ ! -f "~/.doom-speedrun-helper" ]; then
 	echo "PRBOOM_PLUS_ENABLED=$PRBOOM_PLUS_ENABLED" >> ~/.doom-speedrun-helper
 
 	echo " "
-	echo "Configuration file written:"
+	echo "Configuration file written: ~/.doom-speedrun-helper"
 	cat ~/.doom-speedrun-helper
+fi
+
+play_existing_category() {
+	echo "Playing Existing Speedrun Category"
+}
+
+create_new_category() {
+	echo "Creating New Speedrun Category"
+	echo "Skill:"
+	echo "0) No Monsters"
+	echo "1) I'm Too Young To Die"
+	echo "2) Hey Not Too Rough"
+	echo "3) Hurt Me Plenty"
+	echo "4) Ultraviolence"
+	echo "5) Nightmare!"
+
+	echo " "
+
+	echo "Which Doom IWAD?"
+	echo "1) Ultimate Doom"
+	echo "2) Doom 2"
+
+	echo " "
+
+	echo "Starting Level? (Doom e.g.: '1 1' Doom 2 e.g.: '21')"
+
+	echo " "
+}
+
+render_demo_video() {
+	echo "Rendering Demo Video"
+}
+if [ -f "$DOOM_SR_CONFIG" ]; then
+	#This second part is a menu for configuring your speedrun
+
+	echo "==================================="
+	echo "=Welcome to DOOM Speedrun Helper! ="
+	echo "==================================="
+	echo " "
+	echo "What would you like to do?"
+	echo "1) Create New Category"
+	echo "2) Play Existing Category"
+	echo "3) Render Demo Video"
+	echo "4) Exit"
+
+	while :
+	do
+    		cat<<EOF
+    		=================================
+    		Welcome to DOOM Speedrun Helper
+    		---------------------------------
+    		Please enter your choice:
+
+    		1) Play Existing Speedrun Category
+		2) Create New Speedrun Category
+		3) Render Demo Video
+		Q) Exit
+    		---------------------------------
+EOF
+    		read -n1 -s
+    		case "$REPLY" in
+    			"1")  play_existing_category    ;;
+    			"2")  create_new_category       ;;
+    			"3")  render_demo_video         ;;
+    			"Q")  exit                      ;;
+    			"q")  exit                      ;; 
+     			* )  echo "invalid option"     ;;
+    		esac
+done
 fi
