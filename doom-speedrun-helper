@@ -67,8 +67,41 @@ if [ ! -f "$DOOM_SR_CONFIG" ]; then
 	cat ~/.doom-speedrun-helper
 fi
 
+run_doom() {
+	echo "Loading vars from file ${filelist[$selection]}..."
+	source ${filelist[$selection]}
+	source $DOOM_SR_CONFIG
+	DEMO_DIR="demos/$(echo "${filelist[$selection]}" | awk -F "/" '{ print $2 }')"
+	mkdir -p $DEMO_DIR
+	echo "NAME: $NAME, IWAD: $IWAD, SKILL: $SKILL, STARTING_LEVEL: $STARTING_LEVEL"
+	if [[ "$IWAD" == "DOOMU" ]]; then
+		SELECTED_IWAD=$DOOMU_WAD
+	fi
+	echo "SELECTED_IWAD = $SELECTED_IWAD"
+	read -n1 -r -p "Press space to continue..." key
+
+	if [ "$key" = '' ]; then
+		prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$(date +%m"-"%d"-"%Y"_"%H"-"%M"-"%S).lmp
+	fi
+}
+
 play_existing_category() {
 	echo "Playing Existing Speedrun Category"
+	
+	i=0
+	for f in category/*
+	do
+		filelist[ $i ]=$f
+		printf "$i) "
+		cat $f | grep "NAME" | awk -F "=" '{ print $2 }'
+		(( i++ ))
+	done
+
+	#echo "file list length = ${#filelist[@]}"
+
+	read -p "> " selection
+
+	run_doom
 }
 
 create_new_category() {
