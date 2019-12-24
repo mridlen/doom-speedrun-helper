@@ -32,7 +32,7 @@ if [ ! -f "$DOOM_SR_CONFIG" ]; then
 	fi
 
 	echo "Finding prboom..."
-	PRBOOM_PATH=$(which prboom | grep -v "no prboom")
+	PRBOOM_PATH=$(command -v prboom)
 	if [ -z "$PRBOOM_PATH" ]; then
 		PRBOOM_ENABLED=0
 	else
@@ -40,7 +40,7 @@ if [ ! -f "$DOOM_SR_CONFIG" ]; then
 	fi
 
 	echo "Finding prboom-plus..."
-	PRBOOM_PLUS_PATH=$(which prboom | grep -v "no prboom")
+	PRBOOM_PLUS_PATH=$(command -v prboom-plus)
 	if [ -z "$PRBOOM_PATH" ]; then
 		PRBOOM_PLUS_ENABLED=0
 	else
@@ -78,11 +78,22 @@ run_doom() {
 		SELECTED_IWAD=$DOOMU_WAD
 	fi
 	echo "SELECTED_IWAD = $SELECTED_IWAD"
-	read -n1 -r -p "Press space to continue..." key
 
-	if [ "$key" = '' ]; then
-		prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$(date +%m"-"%d"-"%Y"_"%H"-"%M"-"%S).lmp
-	fi
+	key=''
+	while [ "$key" = '' ]
+	do
+		read -n1 -r -p "Press space to continue or any other key to quit..." key
+		if [ "$key" = '' ]; then
+			# I need to grab the date here prior to building the command, because the date is the UUID of the lmp demo, down to the second
+			CURRENT_DATE=$(date +%m"-"%d"-"%Y"_"%H"-"%M"-"%S).lmp
+			DOOM_COMMAND="prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$CURRENT_DATE.lmp"
+			#this command is what runs the pre-built doom command
+			eval "$DOOM_COMMAND"
+			printf "\n\nDo you want to try again?\n"
+		fi
+	done
+
+	exit 0
 }
 
 play_existing_category() {
