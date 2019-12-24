@@ -86,7 +86,7 @@ run_doom() {
 		if [ "$key" = '' ]; then
 			# I need to grab the date here prior to building the command, because the date is the UUID of the lmp demo, down to the second
 			CURRENT_DATE=$(date +%m"-"%d"-"%Y"_"%H"-"%M"-"%S).lmp
-			DOOM_COMMAND="prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$CURRENT_DATE.lmp"
+			DOOM_COMMAND="prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$CURRENT_DATE"
 			#this command is what runs the pre-built doom command
 			eval "$DOOM_COMMAND"
 			printf "\n\nDo you want to try again?\n"
