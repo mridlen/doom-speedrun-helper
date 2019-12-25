@@ -125,17 +125,25 @@ create_new_category() {
 	echo "4) Ultraviolence"
 	echo "5) Nightmare!"
 
+	read -p "> " SKILL
+
 	echo " "
 
 	echo "Which Doom IWAD?"
 	echo "1) Ultimate Doom"
 	echo "2) Doom 2"
 
+	read -p "> " IWAD
+
 	echo " "
 
 	echo "Starting Level? (Doom e.g.: '1 1' Doom 2 e.g.: '21')"
 
+	read -p "> " STARTING_LEVEL
+
 	echo " "
+
+	read -p "Please enter your desired filename (no wildcards)? " FILENAME
 }
 
 render_demo_video() {
