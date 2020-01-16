@@ -143,6 +143,22 @@ create_new_category() {
 
 	echo " "
 
+	read -p "Do you want to use a complevel (Y/N)? " USE_COMPLEVEL
+
+	if [[ "$USE_COMPLEVEL" == "Y" || "$USE_COMPLEVEL" == "y" ]]; then
+		read -p "What complevel (1-17)? " COMPLEVEL
+	fi
+
+	read -p "Do you want monsters to respawn (Y/N)? " RESPAWN
+
+	read -p "Do you want fast monsters (Y/N)? " FAST
+
+	read -p "Do you want to use "solo-net" (play single player with network game wad settings) (Y/N)? " SOLONET
+
+	read -p "Do you want to use short tics (limited movement resolution) (Y/N)? " SHORTTICS
+
+	read -p "Additional command line options (default: blank): " ADDITIONAL_OPTIONS
+
 	read -p "Please enter your desired filename (no wildcards)? " FILENAME
 }
 
@@ -152,35 +168,24 @@ render_demo_video() {
 if [ -f "$DOOM_SR_CONFIG" ]; then
 	#This second part is a menu for configuring your speedrun
 
-	echo "==================================="
-	echo "=Welcome to DOOM Speedrun Helper! ="
-	echo "==================================="
+	echo "===================================="
+	echo "= Welcome to DOOM Speedrun Helper! ="
+	echo "===================================="
 	echo " "
 	echo "What would you like to do?"
-	echo "1) Create New Category"
-	echo "2) Play Existing Category"
+	echo "1) Play Existing Category"
+	echo "2) Create New Category"
 	echo "3) Render Demo Video"
 	echo "4) Exit"
 
 	while :
 	do
-    		cat<<EOF
-    		=================================
-    		Welcome to DOOM Speedrun Helper
-    		---------------------------------
-    		Please enter your choice:
-
-    		1) Play Existing Speedrun Category
-		2) Create New Speedrun Category
-		3) Render Demo Video
-		Q) Exit
-    		---------------------------------
-EOF
     		read -n1 -s
     		case "$REPLY" in
     			"1")  play_existing_category    ;;
     			"2")  create_new_category       ;;
     			"3")  render_demo_video         ;;
+			"4")  exit			;;
     			"Q")  exit                      ;;
     			"q")  exit                      ;; 
      			* )  echo "invalid option"     ;;
