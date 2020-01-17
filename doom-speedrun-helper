@@ -72,7 +72,7 @@ run_doom() {
 	source ${filelist[$selection]}
 	source $DOOM_SR_CONFIG
 	DEMO_DIR="demos/$(echo "${filelist[$selection]}" | awk -F "/" '{ print $2 }')"
-	mkdir -p $DEMO_DIR
+	mkdir -p "$DEMO_DIR"
 	echo "NAME: $NAME, IWAD: $IWAD, SKILL: $SKILL, STARTING_LEVEL: $STARTING_LEVEL"
 	if [[ "$IWAD" == "DOOMU" ]]; then
 		SELECTED_IWAD=$DOOMU_WAD
@@ -82,8 +82,8 @@ run_doom() {
 	key=''
 	while [ "$key" = '' ]
 	do
-		read -n1 -r -p "Press space to continue or any other key to quit..." key
-		if [ "$key" = '' ]; then
+		read -n1 -r -p "Press any key to continue, or CTRL+C to quit..." key
+		if [ "$key" != '#' ]; then
 			# I need to grab the date here prior to building the command, because the date is the UUID of the lmp demo, down to the second
 			CURRENT_DATE=$(date +%m"-"%d"-"%Y"_"%H"-"%M"-"%S).lmp
 			DOOM_COMMAND="prboom-plus -config ~/prboom-plus.cfg -iwad $SELECTED_IWAD -warp $STARTING_LEVEL -skill $SKILL -record $DEMO_DIR/$IWAD-$SKILL-$CURRENT_DATE"
@@ -136,7 +136,15 @@ create_new_category() {
 	read -p "> " IWAD
 
 	echo " "
+	
+	read -p "Would you like to specify additional WAD(s) (Y/N)? " USE_WADS
 
+	if [[ "$USE_WADS" == "y" || "$USE_WADS" == "Y" ]]; then
+		read -p "Specify a semicolon (;) delimited list of WADs: " WADS
+	fi
+
+	echo " "
+	
 	echo "Starting Level? (Doom e.g.: '1 1' Doom 2 e.g.: '21')"
 
 	read -p "> " STARTING_LEVEL
@@ -150,16 +158,38 @@ create_new_category() {
 	fi
 
 	read -p "Do you want monsters to respawn (Y/N)? " RESPAWN
-
 	read -p "Do you want fast monsters (Y/N)? " FAST
-
 	read -p "Do you want to use "solo-net" (play single player with network game wad settings) (Y/N)? " SOLONET
-
 	read -p "Do you want to use short tics (limited movement resolution) (Y/N)? " SHORTTICS
-
 	read -p "Additional command line options (default: blank): " ADDITIONAL_OPTIONS
+	read -p "Give your category a filename (no wildcards or spaces)? " FILENAME
+	read -p "Give your category a nice name (spaces allowed)? " NAME
 
-	read -p "Please enter your desired filename (no wildcards)? " FILENAME
+	#Output variables to screen and confirm
+	echo " "
+	echo "Here are the parameters you specified..."
+	echo " "
+	echo "SKILL: $SKILL"
+	echo "IWAD: $IWAD"
+	echo "STARTING_LEVEL: $STARTING_LEVEL"
+	echo "USE_COMPLEVEL: $USE_COMPLEVEL"
+	echo "COMPLEVEL: $COMPLEVEL"
+	echo "RESPAWN: $RESPAWN"
+	echo "FAST: $FAST"
+	echo "SOLONET: $SOLONET"
+	echo "SHORTTICS: $SHORTTICS"
+	echo "ADDITIONAL_OPTIONS: $ADDITIONAL_OPTIONS"
+	echo "FILENAME: $FILENAME"
+	echo "NAME: $NAME"
+	echo " "
+
+	read -p "Does this look right (Y/N)?" CONFIRM
+
+	if [[ "$CONFIRM" == "y" || "$CONFIRM" == "Y" ]]; then
+		#We will assume this has already been validated by this point (will add in validation later once the product is functional)
+
+		echo "Writing out file..."
+	fi
 }
 
 render_demo_video() {
